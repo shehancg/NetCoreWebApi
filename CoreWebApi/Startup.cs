@@ -1,3 +1,5 @@
+using CoreWebApi.Repository.Impl;
+using CoreWebApi.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,6 +41,9 @@ namespace CoreWebApi
             // Register the SchoolManagementContext with the database provider
             services.AddDbContext<SchoolManagementContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IClassroomRepository, ClassroomRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
