@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreWebApi.Repositories;
 
 namespace CoreWebApi
 {
@@ -44,6 +45,12 @@ namespace CoreWebApi
 
             // Classroom repository
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
+
+            // Student repository
+            services.AddScoped<IStudentRepository, StudentRepository>();
+
+            // Teacher Repository
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
 
             // CORS configuration
             services.AddCors(options =>
