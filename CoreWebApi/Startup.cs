@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SchoolManagementSystem.API.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,10 @@ namespace CoreWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "School Management System API", Version = "v1" });
             });
+
+            // Register the SchoolManagementContext with the database provider
+            services.AddDbContext<SchoolManagementContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
