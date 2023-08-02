@@ -42,7 +42,20 @@ namespace CoreWebApi
             services.AddDbContext<SchoolManagementContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Classroom repository
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
+
+            // CORS configuration
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
 
         }
 
@@ -57,6 +70,9 @@ namespace CoreWebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Use CORS middleware with the "AllowReactApp" policy
+            app.UseCors("AllowReactApp");
 
             app.UseAuthorization();
 
