@@ -52,6 +52,9 @@ namespace CoreWebApi
             // Teacher Repository
             services.AddScoped<ITeacherRepository, TeacherRepository>();
 
+            // Subject Repository
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
+
             // CORS configuration
             services.AddCors(options =>
             {

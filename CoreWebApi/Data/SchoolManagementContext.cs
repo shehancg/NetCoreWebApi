@@ -10,9 +10,8 @@ namespace SchoolManagementSystem.API.Data
         }
 
         public DbSet<StudentModel> Students { get; set; }
-
         public DbSet<TeacherModel> Teachers { get; set; }
-        /*public DbSet<Subject> Subjects { get; set; }*/
+        public DbSet<SubjectModel> Subjects { get; set; }
         public DbSet<ClassroomModel> Classrooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
