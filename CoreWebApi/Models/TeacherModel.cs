@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace CoreWebApi.Models
 {
@@ -24,5 +25,10 @@ namespace CoreWebApi.Models
         [Column(TypeName = "nvarchar(50)")]
         [Required]
         public string EmailAddress { get; set; }
+
+        // One-to-Many Relationship r defined One Teacher can be allocated to many Subjects & classrooms
+        public List<AllocateSubjectsModel> AllocatedSubjects { get; set; }
+
+        public ICollection<AllocateClassroomsModel> AllocateClassrooms { get; set; } = new List<AllocateClassroomsModel>();
     }
 }

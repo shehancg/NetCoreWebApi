@@ -14,6 +14,10 @@ namespace SchoolManagementSystem.API.Data
         public DbSet<SubjectModel> Subjects { get; set; }
         public DbSet<ClassroomModel> Classrooms { get; set; }
 
+        public DbSet<AllocateSubjectsModel> AllocateSubjects { get; set; }
+
+        public DbSet<AllocateClassroomsModel> AllocateClassrooms { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Add any additional configurations here if needed
