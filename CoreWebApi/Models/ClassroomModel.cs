@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoreWebApi.Models
@@ -11,5 +12,8 @@ namespace CoreWebApi.Models
 
         [Column(TypeName = "nvarchar(100)")]
         public string ClassroomName { get; set;}
+
+        // Navigation property for the one-to-many relationship
+        public ICollection<StudentModel> Students { get; set; }
     }
 }
