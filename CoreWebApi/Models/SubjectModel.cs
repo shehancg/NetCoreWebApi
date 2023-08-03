@@ -15,6 +15,6 @@ namespace CoreWebApi.Models
         public string SubjectName { get; set; }
 
         // One-to-Many Relationship: One Subject can be allocated to many Teachers
-        public List<AllocateSubjectsModel> Allocations { get; set; }
+
     }
 }

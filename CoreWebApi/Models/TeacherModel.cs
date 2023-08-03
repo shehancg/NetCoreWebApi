@@ -27,8 +27,6 @@ namespace CoreWebApi.Models
         public string EmailAddress { get; set; }
 
         // One-to-Many Relationship r defined One Teacher can be allocated to many Subjects & classrooms
-        public List<AllocateSubjectsModel> AllocatedSubjects { get; set; }
 
-        public ICollection<AllocateClassroomsModel> AllocateClassrooms { get; set; } = new List<AllocateClassroomsModel>();
     }
 }
