@@ -51,5 +51,13 @@ namespace CoreWebApi.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IEnumerable<AllocateClassroomModel>> GetClassesByTeacherIdAsync(int teacherId)
+        {
+            return await _context.AllocateClassrooms
+                .Where(AllocateClassrooms => AllocateClassrooms.TeacherID == teacherId)
+                .Include(AllocateClassrooms => AllocateClassrooms.Classroom)
+                .ToListAsync();
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace CoreWebApi.Repositories
         Task<AllocateClassroomModel> AddAllocateClassroomAsync(AllocateClassroomModel allocateClassroom);
         Task<AllocateClassroomModel> UpdateAllocateClassroomAsync(AllocateClassroomModel AllocateClassroomModel);
         Task<bool> DeleteAllocateClassroomAsync(int allocateClassroomId);
+        Task<IEnumerable<AllocateClassroomModel>> GetClassesByTeacherIdAsync(int teacherId);
     }
 }

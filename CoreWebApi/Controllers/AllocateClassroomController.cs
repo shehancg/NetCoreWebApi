@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CoreWebApi.Models;
 using CoreWebApi.Repositories;
@@ -12,10 +13,12 @@ namespace CoreWebApi.Controllers
     public class AllocateClassroomController : ControllerBase
     {
         private readonly IAllocateClassroomRepository _allocateClassroomRepository;
+        private readonly ITeacherRepository _teacherRepository;
 
-        public AllocateClassroomController(IAllocateClassroomRepository allocateClassroomRepository)
+        public AllocateClassroomController(IAllocateClassroomRepository allocateClassroomRepository, ITeacherRepository teacherRepository)
         {
             _allocateClassroomRepository = allocateClassroomRepository;
+            _teacherRepository = teacherRepository;
         }
 
         // GET: api/AllocateClassroom
@@ -111,6 +114,35 @@ namespace CoreWebApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error deleting allocate classroom: {ex.Message}");
+            }
+        }
+
+        // GET: api/AllocateClassroom/teacher/{teacherId}
+        [HttpGet("teacher/{teacherId}")]
+        public async Task<IActionResult> GetClassesByTeacherId(int teacherId)
+        {
+            try
+            {
+                var teacher = await _teacherRepository.GetTeacherById(teacherId);
+                if (teacher == null)
+                    return NotFound("Teacher not found.");
+
+                var allocatedClasses = await _allocateClassroomRepository.GetClassesByTeacherIdAsync(teacherId);
+
+                var result = allocatedClasses.Select(classroom => new
+                {
+                    classroom.AllocateClassroomID,
+                    classroom.ClassroomID,
+                    classroom.TeacherID,
+                    classroom.Classroom.ClassroomName
+
+                });
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving Classes by teacher ID: {ex.Message}");
             }
         }
     }
