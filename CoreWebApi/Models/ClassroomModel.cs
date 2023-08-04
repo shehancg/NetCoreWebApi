@@ -14,6 +14,8 @@ namespace CoreWebApi.Models
         public string ClassroomName { get; set;}
 
         // Navigation property for the one-to-many relationship
-        public ICollection<StudentModel> Students { get; set; }
+        public ICollection<StudentModel> Students { get; set; } = new List<StudentModel>();
+
+        public ICollection<AllocateClassroomModel> AllocateClassrooms { get; set; } = new List<AllocateClassroomModel>();
     }
 }

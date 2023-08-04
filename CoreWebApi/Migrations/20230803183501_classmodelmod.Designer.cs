@@ -3,65 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagementSystem.API.Data;
 
 namespace CoreWebApi.Migrations
 {
     [DbContext(typeof(SchoolManagementContext))]
-    partial class SchoolManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20230803183501_classmodelmod")]
+    partial class classmodelmod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("CoreWebApi.Models.AllocateClassroomModel", b =>
-                {
-                    b.Property<int>("AllocateClassroomID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassroomID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeacherID")
-                        .HasColumnType("int");
-
-                    b.HasKey("AllocateClassroomID");
-
-                    b.HasIndex("ClassroomID");
-
-                    b.HasIndex("TeacherID");
-
-                    b.ToTable("AllocateClassroomModel");
-                });
-
-            modelBuilder.Entity("CoreWebApi.Models.AllocateSubjectModel", b =>
-                {
-                    b.Property<int>("AllocateSubjectID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("SubjectID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeacherID")
-                        .HasColumnType("int");
-
-                    b.HasKey("AllocateSubjectID");
-
-                    b.HasIndex("SubjectID");
-
-                    b.HasIndex("TeacherID");
-
-                    b.ToTable("AllocateSubjects");
-                });
 
             modelBuilder.Entity("CoreWebApi.Models.ClassroomModel", b =>
                 {
@@ -161,36 +119,6 @@ namespace CoreWebApi.Migrations
                     b.HasKey("TeacherID");
 
                     b.ToTable("Teachers");
-                });
-
-            modelBuilder.Entity("CoreWebApi.Models.AllocateClassroomModel", b =>
-                {
-                    b.HasOne("CoreWebApi.Models.ClassroomModel", "Classroom")
-                        .WithMany("AllocateClassrooms")
-                        .HasForeignKey("ClassroomID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CoreWebApi.Models.TeacherModel", "Teacher")
-                        .WithMany("AllocateClassrooms")
-                        .HasForeignKey("TeacherID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CoreWebApi.Models.AllocateSubjectModel", b =>
-                {
-                    b.HasOne("CoreWebApi.Models.SubjectModel", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CoreWebApi.Models.TeacherModel", "Teacher")
-                        .WithMany("AllocateSubjects")
-                        .HasForeignKey("TeacherID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CoreWebApi.Models.StudentModel", b =>

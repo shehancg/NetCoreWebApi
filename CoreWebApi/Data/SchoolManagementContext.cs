@@ -13,6 +13,7 @@ namespace SchoolManagementSystem.API.Data
         public DbSet<TeacherModel> Teachers { get; set; }
         public DbSet<SubjectModel> Subjects { get; set; }
         public DbSet<ClassroomModel> Classrooms { get; set; }
+        public DbSet<AllocateSubjectModel> AllocateSubjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
