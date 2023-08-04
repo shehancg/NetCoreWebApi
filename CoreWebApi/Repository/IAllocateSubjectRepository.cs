@@ -11,5 +11,6 @@ namespace CoreWebApi.Repository
         Task<AllocateSubjectModel> AddAllocatedSubjectAsync(AllocateSubjectModel allocateSubject);
         Task<AllocateSubjectModel> UpdateAllocatedSubjectAsync(AllocateSubjectModel allocateSubject);
         Task<bool> DeleteAllocatedSubjectAsync(int allocateSubjectId);
+        Task<IEnumerable<AllocateSubjectModel>> GetSubjectsByTeacherIdAsync(int teacherId);
     }
 }

@@ -58,6 +58,9 @@ namespace CoreWebApi
             // Allocatesubject Repository
             services.AddScoped<IAllocateSubjectRepository, AllocateSubjectRepository>();
 
+            // Allocateclass Repository
+            services.AddScoped<IAllocateClassroomRepository, AllocateClassroomRepository>();
+
             // CORS configuration
             services.AddCors(options =>
             {

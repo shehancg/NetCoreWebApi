@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SchoolManagementSystem.API.Data;
+using System.Linq;
 
 namespace CoreWebApi.Repository.Impl
 {
@@ -48,6 +49,14 @@ namespace CoreWebApi.Repository.Impl
             _context.AllocateSubjects.Remove(allocateSubject);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<AllocateSubjectModel>> GetSubjectsByTeacherIdAsync(int teacherId)
+        {
+            return await _context.AllocateSubjects
+                .Where(subject => subject.TeacherID == teacherId)
+                .Include(subject => subject.Subject) // Include the related Subject
+                .ToListAsync();
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using CoreWebApi.Models;
+using CoreWebApi.Repositories;
 using CoreWebApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CoreWebApi.Controllers
@@ -11,10 +13,12 @@ namespace CoreWebApi.Controllers
     public class AllocateSubjectController : ControllerBase
     {
         private readonly IAllocateSubjectRepository _allocateSubjectRepository;
+        private readonly ITeacherRepository _teacherRepository;
 
-        public AllocateSubjectController(IAllocateSubjectRepository allocateSubjectRepository)
+        public AllocateSubjectController(IAllocateSubjectRepository allocateSubjectRepository, ITeacherRepository teacherRepository)
         {
             _allocateSubjectRepository = allocateSubjectRepository;
+            _teacherRepository = teacherRepository;
         }
 
         [HttpGet]
@@ -99,5 +103,34 @@ namespace CoreWebApi.Controllers
                 return BadRequest($"Error deleting allocated subject: {ex.Message}");
             }
         }
+
+        [HttpGet("teacher/{teacherId}")]
+        public async Task<IActionResult> GetSubjectsByTeacherId(int teacherId)
+        {
+            try
+            {
+                var teacher = await _teacherRepository.GetTeacherById(teacherId);
+                if (teacher == null)
+                    return NotFound("Teacher not found.");
+
+                var allocatedSubjects = await _allocateSubjectRepository.GetSubjectsByTeacherIdAsync(teacherId);
+
+                var result = allocatedSubjects.Select(subject => new
+                {
+                    subject.AllocateSubjectID,
+                    subject.SubjectID,
+                    subject.TeacherID,
+                    subject.Subject.SubjectName 
+                    
+                });
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving subjects by teacher ID: {ex.Message}");
+            }
+        }
+
     }
 }
