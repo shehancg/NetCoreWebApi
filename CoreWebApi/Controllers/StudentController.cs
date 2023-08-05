@@ -110,5 +110,25 @@ namespace CoreWebApi.Controllers
             if (dateOfBirth.Date > today.AddYears(-age)) age--;
             return age;
         }
+
+        [HttpGet("teachers-subjects/{studentId}")]
+        public async Task<IActionResult> GetTeachersAndSubjectsByStudentId(int studentId)
+        {
+            try
+            {
+                var teachersAndSubjects = await _studentRepository.GetTeachersAndSubjectsByStudentIdAsync(studentId);
+
+                if (teachersAndSubjects == null)
+                {
+                    return NotFound($"Student with ID {studentId} not found.");
+                }
+
+                return Ok(teachersAndSubjects);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while fetching teachers and subjects: {ex.Message}");
+            }
+        }
     }
 }

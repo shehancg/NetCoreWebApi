@@ -30,5 +30,20 @@ namespace CoreWebApi.Controllers
 
             return Ok(studentDetails);
         }
+
+        [HttpGet("new/{studentId}")]
+        public async Task<IActionResult> GetTeachersAndSubjectsByStudentIdFunc(int studentId)
+        {
+            try
+            {
+                var teachersAndSubjects = await _studentRepository.GetTeachersAndSubjectsByStudentIdAsync(studentId);
+                return Ok(teachersAndSubjects);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception and return an error response
+                return StatusCode(500, "An error occurred while fetching teachers and subjects.");
+            }
+        }
     }
 }
