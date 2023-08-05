@@ -1,7 +1,9 @@
-﻿using CoreWebApi.Models;
+﻿using CoreWebApi.Dtos;
+using CoreWebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.API.Data;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CoreWebApi.Repository.Impl

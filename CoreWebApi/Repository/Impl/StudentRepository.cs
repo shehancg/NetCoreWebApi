@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CoreWebApi.Dtos;
+using System.Threading.Tasks;
 using CoreWebApi.Models;
 using CoreWebApi.Repository;
 using SchoolManagementSystem.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoreWebApi.Repositories
 {
@@ -45,6 +48,22 @@ namespace CoreWebApi.Repositories
                 _context.Students.Remove(student);
                 _context.SaveChanges();
             }
+        }
+
+        public async Task<StudentDetailsDto> GetStudentDetailsByIdAsync(int studentId)
+        {
+            return await _context.Students
+                .Where(s => s.StudentID == studentId)
+                .Select(s => new StudentDetailsDto
+                {
+                    FullName = s.FirstName + " " + s.LastName, // Concatenate first name and last name
+                    ContactPerson = s.ContactPerson,
+                    ContactNo = s.ContactNo,
+                    EmailAddress = s.EmailAddress,
+                    DateOfBirth = s.DateOfBirth.Date,
+                    ClassroomName = s.Classroom.ClassroomName
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }
