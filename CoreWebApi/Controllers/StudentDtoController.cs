@@ -36,7 +36,7 @@ namespace CoreWebApi.Controllers
         {
             try
             {
-                var teachersAndSubjects = await _studentRepository.GetTeachersAndSubjectsByStudentIdAsync(studentId);
+                var teachersAndSubjects = await _studentRepository.GetTeachersAndSubjectsByStudentIdFunc(studentId);
                 return Ok(teachersAndSubjects);
             }
             catch (Exception ex)

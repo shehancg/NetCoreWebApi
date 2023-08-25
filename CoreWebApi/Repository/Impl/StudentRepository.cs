@@ -71,7 +71,7 @@ namespace CoreWebApi.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        /*ublic List<TeacherModel> GetTeachersAndSubjectsForStudent(int studentId)
+        /*public List<TeacherModel> GetTeachersAndSubjectsForStudent(int studentId)
         {
             return _context.Students
                 .Where(s => s.StudentID == studentId)
@@ -155,7 +155,8 @@ namespace CoreWebApi.Repositories
             return new List<(TeacherModel teacher, List<SubjectModel> allocatedSubjects)>();
         }
 
-        public async Task<List<TeacherAndSubject>> GetTeachersAndSubjectsByStudentIdFunc(int studentId)
+        /*This is For a stored procedure */
+        /*public async Task<List<TeacherAndSubject>> GetTeachersAndSubjectsByStudentIdFunc(int studentId)
         {
             var result = new List<TeacherAndSubject>();
 
@@ -194,6 +195,47 @@ namespace CoreWebApi.Repositories
             }
 
             return result;
+        }*/
+
+        public async Task<List<TeacherAndSubject>> GetTeachersAndSubjectsByStudentIdFunc(int studentId)
+        {
+            var result = new List<TeacherAndSubject>();
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new SqlCommand("SELECT * FROM dbo.GetTeachersAndSubjectsForStudent(@StudentID)", connection))
+                {
+                    command.Parameters.Add(new SqlParameter("@StudentID", SqlDbType.Int) { Value = studentId });
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (reader.Read())
+                        {
+                            // Read the columns from the result set
+                            var teacherId = reader.GetInt32(0);
+                            var teacherFirstName = reader.GetString(1);
+                            var teacherLastName = reader.GetString(2);
+                            var subjectId = reader.GetInt32(3);
+                            var subjectName = reader.GetString(4);
+
+                            // Create TeacherAndSubject object and add it to the result list
+                            result.Add(new TeacherAndSubject
+                            {
+                                TeacherId = teacherId,
+                                TeacherFirstName = teacherFirstName,
+                                TeacherLastName = teacherLastName,
+                                SubjectId = subjectId,
+                                SubjectName = subjectName
+                            });
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
+
     }
 }
