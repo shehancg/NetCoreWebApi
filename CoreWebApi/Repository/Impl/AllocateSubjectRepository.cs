@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SchoolManagementSystem.API.Data;
 using System.Linq;
+using System;
 
 namespace CoreWebApi.Repository.Impl
 {
@@ -26,12 +27,33 @@ namespace CoreWebApi.Repository.Impl
             return await _context.AllocateSubjects.FindAsync(allocateSubjectId);
         }
 
-        public async Task<AllocateSubjectModel> AddAllocatedSubjectAsync(AllocateSubjectModel allocateSubject)
+        /*public async Task<AllocateSubjectModel> AddAllocatedSubjectAsync(AllocateSubjectModel allocateSubject)
         {
             _context.AllocateSubjects.Add(allocateSubject);
             await _context.SaveChangesAsync();
             return allocateSubject;
+        }*/
+
+        /* With validation prevent in same subject to same teacher */
+        public async Task<AllocateSubjectModel> AddAllocatedSubjectAsync(AllocateSubjectModel allocateSubject)
+        {
+            // Check if the same subject is already allocated to the same teacher
+            bool subjectAlreadyAllocated = await _context.AllocateSubjects
+                .AnyAsync(allocated =>
+                    allocated.TeacherID == allocateSubject.TeacherID &&
+                    allocated.SubjectID == allocateSubject.SubjectID);
+
+            if (subjectAlreadyAllocated)
+            {
+                // Subject is already allocated to the same teacher, return an appropriate response or throw an exception
+                throw new InvalidOperationException("The same subject is already allocated to the same teacher.");
+            }
+
+            _context.AllocateSubjects.Add(allocateSubject);
+            await _context.SaveChangesAsync();
+            return allocateSubject;
         }
+
 
         public async Task<AllocateSubjectModel> UpdateAllocatedSubjectAsync(AllocateSubjectModel allocateSubject)
         {

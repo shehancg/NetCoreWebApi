@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreWebApi.Models;
@@ -26,12 +27,32 @@ namespace CoreWebApi.Repositories
             return await _context.AllocateClassrooms.FindAsync(allocateClassroomId);
         }
 
-        public async Task<AllocateClassroomModel> AddAllocateClassroomAsync(AllocateClassroomModel allocateClassroom)
+        /*public async Task<AllocateClassroomModel> AddAllocateClassroomAsync(AllocateClassroomModel allocateClassroom)
         {
             _context.AllocateClassrooms.Add(allocateClassroom);
             await _context.SaveChangesAsync();
             return allocateClassroom;
+        }*/
+
+        public async Task<AllocateClassroomModel> AddAllocateClassroomAsync(AllocateClassroomModel allocateClassroom)
+        {
+            // Check if the same classroom is already allocated to the same teacher
+            bool classroomAlreadyAllocated = await _context.AllocateClassrooms
+                .AnyAsync(allocated =>
+                    allocated.TeacherID == allocateClassroom.TeacherID &&
+                    allocated.ClassroomID == allocateClassroom.ClassroomID);
+
+            if (classroomAlreadyAllocated)
+            {
+                // Classroom is already allocated to the same teacher, return an appropriate response or throw an exception
+                throw new InvalidOperationException("The same classroom is already allocated to the same teacher.");
+            }
+
+            _context.AllocateClassrooms.Add(allocateClassroom);
+            await _context.SaveChangesAsync();
+            return allocateClassroom;
         }
+
 
         public async Task<AllocateClassroomModel> UpdateAllocateClassroomAsync(AllocateClassroomModel allocateClassroom)
         {
