@@ -16,6 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreWebApi.Repositories;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using CoreWebApi.Services;
+using CoreWebApi.Services.Impl;
 
 namespace CoreWebApi
 {
@@ -71,6 +76,28 @@ namespace CoreWebApi
                                .AllowAnyHeader()
                                .AllowAnyMethod();
                     });
+            });
+
+            services.AddScoped<IJwtService, JwtService>();
+
+            services.AddScoped<IAuthService, AuthService>();
+
+            var key = Encoding.ASCII.GetBytes("minimumSixteenCharacters");
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
 
         }
